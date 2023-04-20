@@ -1,0 +1,10 @@
+# Python
+__pycache__/
+.ruff_cache/
+
+.venv/
+.cache/
+
+../env
+
+
