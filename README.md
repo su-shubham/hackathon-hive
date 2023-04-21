@@ -4,7 +4,7 @@ Hackathon Hive is a API built using FastAPI, SQLModel, and PostgresSQL. Its obje
 
 > To run examples in local,follow these steps:
 
-```bash
+```
 1. Clone the repository to your local machine.
 
     git clone https://github.com/su-shubham/hackathon-hive.git
