@@ -1,14 +1,20 @@
-from fastapi import APIRouter, status, Depends, HTTPException
-from sqlmodel import Session, select
-from schemas import CreateHackathon, UpdateHackathon
-from models import Hackathon, HackathonUser
-from db import get_session
-from .users import current_user
-from schemas import User
 import uuid
 
+from db import get_session
+from fastapi import APIRouter, Depends, HTTPException, status
+from models import Hackathon, HackathonUser
+from schemas import CreateHackathon, UpdateHackathon, User
+from sqlmodel import Session, select
+
+from .users import current_user
 
 router = APIRouter(prefix="/hackathons", tags=["Hackathons"])
+
+
+def get_enrolled_hackathons(db: Session, current_user: User) -> list[Hackathon]:
+    print(current_user.id)
+    # user_enrolled = select(Hackathon).where(HackathonUser.user_id == current_user.id)
+    # return user_enrolled
 
 
 @router.get("/")
@@ -73,6 +79,7 @@ def register_to_hackathon(
     current_user: User = Depends(current_user),
     session: Session = Depends(get_session),
 ):  # noqa: E501
+    print(current_user.id)
     if not current_user:
         raise HTTPException(
             status_code=404, detail="To register first needs to be logged In....."
@@ -95,13 +102,17 @@ def register_to_hackathon(
     session.refresh(register)
     return register
 
-@router.get("/hackathons")
-async def read_hackathons_for_current_user(
-    current_user: User = Depends(current_user)
+
+@router.post("/enrolled", status_code=status.HTTP_200_OK)
+def enrolled(
+    current_user: User = Depends(current_user), session: Session = Depends(get_session)
 ):
-    hackathons = await current_user.hackathons
-    return hackathons
-
-
-
-
+    if not current_user:
+        raise HTTPException(
+            status_code=404, detail="To register first needs to be logged In....."
+        )
+    enrolled_hackathons = select(Hackathon).where(
+        HackathonUser.user_id == current_user.id
+    )
+    result = session.exec(enrolled_hackathons).all()
+    return result

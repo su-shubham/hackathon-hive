@@ -1,13 +1,14 @@
-from fastapi import APIRouter, HTTPException, Depends, status
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from schemas import User, CreateUser, Token, ResponseUser,TokenData
-from models import User  # noqa: F811
 from datetime import datetime, timedelta
-from jose import jwt
-from passlib.context import CryptContext
-from db import get_session
-from sqlmodel import Session, select
+
 from config import settings
+from db import get_session
+from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from jose import jwt
+from models import User  # noqa: F811
+from passlib.context import CryptContext
+from schemas import CreateUser, ResponseUser, Token, TokenData, User
+from sqlmodel import Session, select
 
 router = APIRouter(prefix="/users", tags=["Users"])
 
@@ -32,7 +33,9 @@ def create_access_token(data: dict, expires_delta: timedelta):
     return encoded_jwt
 
 
-def current_user(db: Session = Depends(get_session), token: str = Depends(oauth2_scheme)):
+def current_user(
+    db: Session = Depends(get_session), token: str = Depends(oauth2_scheme)
+):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -50,6 +53,7 @@ def current_user(db: Session = Depends(get_session), token: str = Depends(oauth2
     if user is None:
         raise credentials_exception
     return user
+
 
 @router.post("/token", response_model=Token)
 def login(
