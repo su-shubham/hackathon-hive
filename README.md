@@ -2,7 +2,7 @@
 
 Hackathon Hive is a API built using FastAPI, SQLModel, and PostgresSQL. Its objective is to provide a platform for hosting and participating in hackathons.
 
-To run examples in local,follow these steps:
+> To run examples in local,follow these steps:
 
 ```bash
 1. Clone the repository to your local machine.
@@ -21,6 +21,6 @@ To run examples in local,follow these steps:
 6. Visit http://localhost:8000/docs to see API docs.
 ```
 
-Usage
+> Usage
 
-`To use Hackathon Hive, navigate to http://localhost:8000/docs in your web browser. From there, you can perform operations on API by visting endpoints.`
+To use Hackathon Hive, navigate to http://localhost:8000/docs in your web browser. From there, you can perform operations on API by visting endpoints.
