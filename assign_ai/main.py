@@ -18,4 +18,4 @@ def startup():
 
 @app.get("/")
 def read_root():
-    return {"Hello": "World!"}
+    return {"message": "Hackathon Hive!"}
